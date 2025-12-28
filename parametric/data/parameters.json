@@ -1,45 +1,47 @@
 {
   "_meta": {
-    "version": "1.1.0",
+    "version": "2.0.0",
     "description": "Parametric CAD variables for Craft Room layout",
     "units": "inches (with mm equivalents in comments)",
     "origin": "Southwest corner (x=0, y=0)",
     "axes": {
-      "x": "West to East (left to right)",
-      "y": "South to North (front to back)"
+      "x": "West to East (left to right) - 30' LONG DIMENSION",
+      "y": "South to North (front to back) - 15' SHORT DIMENSION"
     },
-    "last_updated": "Room resized to 15x30 with 4ft bump-out"
+    "orientation": "Long walls horizontal, short walls vertical",
+    "last_updated": "Fixed orientation: 30x15 with 8x4 bump-out"
   },
 
   "room": {
-    "room_width": 180,
-    "room_width_ft": 15,
-    "room_width_mm": 4572,
-    "room_depth": 360,
-    "room_depth_ft": 30,
-    "room_depth_mm": 9144,
+    "room_width": 360,
+    "room_width_ft": 30,
+    "room_width_mm": 9144,
+    "room_depth": 180,
+    "room_depth_ft": 15,
+    "room_depth_mm": 4572,
     "main_area_sqft": 450,
     "ceiling_height": 96,
     "ceiling_height_mm": 2438,
     "open_wall": "south",
+    "open_wall_length_ft": 30,
     "exterior_wall": "north",
-    "_notes": "15ft x 30ft = 450 sq ft main. Open edge is south wall (y=0). Back wall (y=360) is exterior."
+    "_notes": "30ft wide x 15ft deep = 450 sq ft main. Long walls are horizontal. Open edge is south (30' long). Back wall is north (30' long, exterior)."
   },
 
   "bump_out": {
     "enabled": true,
-    "location": "upper_right_northeast",
-    "x_start": 180,
-    "x_end": 228,
-    "y_start": 264,
-    "y_end": 312,
-    "width": 48,
+    "location": "back_wall_right",
+    "x_start": 264,
+    "x_end": 360,
+    "y_start": 180,
+    "y_end": 228,
+    "width": 96,
     "depth": 48,
-    "width_ft": 4,
+    "width_ft": 8,
     "depth_ft": 4,
-    "area_sqft": 16,
-    "total_room_sqft": 466,
-    "_notes": "4ft x 4ft concrete bump-out for dirty/fume work. Extends east beyond main room. NO open flame."
+    "area_sqft": 32,
+    "total_room_sqft": 482,
+    "_notes": "8ft wide x 4ft deep bump-out extending north from back wall, on right (east) side. For fume/finishing work."
   },
 
   "circulation": {
@@ -51,13 +53,13 @@
     "aisle_secondary_min_mm": 762,
     "aisle_tertiary_min": 24,
     "aisle_tertiary_min_mm": 610,
-    "main_aisle_x_center": 90,
+    "main_aisle_y": 84,
     "main_aisle_width": 42,
-    "kayak_lane_axis": "north_south",
+    "kayak_lane_axis": "east_west",
     "kayak_lane_length_available": 300,
     "kayak_lane_length_target_min": 240,
     "kayak_lane_length_target_max": 276,
-    "_notes": "Center aisle at x=90 (room midpoint). Kayak lane runs N-S utilizing 25ft of 30ft depth."
+    "_notes": "Kayak lane runs E-W utilizing up to 25ft of 30ft width. Main aisle runs parallel to open wall."
   },
 
   "cabinetry": {
@@ -77,237 +79,239 @@
     "counter_height_mm": 914,
     "cabinet_run_back_wall": {
       "x_start": 0,
-      "x_end": 180,
-      "y_start": 336,
-      "y_end": 360,
-      "length": 180,
-      "depth": 24
+      "x_end": 264,
+      "y_start": 156,
+      "y_end": 180,
+      "length": 264,
+      "depth": 24,
+      "_notes": "Back wall cabinetry stops at bump-out (22ft run)"
     },
     "cabinet_run_left_wall": {
       "x_start": 0,
       "x_end": 24,
-      "y_start": 180,
-      "y_end": 336,
-      "length": 156,
-      "depth": 24
-    },
-    "_notes": "Cabinetry: full back wall (15ft) + partial left wall in clean zone."
+      "y_start": 60,
+      "y_end": 156,
+      "length": 96,
+      "depth": 24,
+      "_notes": "Left wall cabinet run in clean zone (8ft)"
+    }
   },
 
   "zones": {
     "zone_receiving": {
       "name": "Receiving / Material Stage",
       "x_start": 0,
-      "x_end": 84,
+      "x_end": 96,
       "y_start": 0,
-      "y_end": 72,
-      "width": 84,
-      "depth": 72,
-      "area_sqft": 42,
+      "y_end": 60,
+      "width": 96,
+      "depth": 60,
+      "area_sqft": 40,
       "category": "shared",
-      "_notes": "Front left - sheet goods entry, vertical rack, lumber stage"
-    },
-    "zone_packship": {
-      "name": "Pack / Ship Bench",
-      "x_start": 120,
-      "x_end": 180,
-      "y_start": 0,
-      "y_end": 48,
-      "width": 60,
-      "depth": 48,
-      "area_sqft": 20,
-      "category": "shared",
-      "_notes": "Front right - one-way flow terminus near exit"
-    },
-    "zone_dusty": {
-      "name": "Dusty Zone (Breakdown + CNC)",
-      "x_start": 96,
-      "x_end": 180,
-      "y_start": 72,
-      "y_end": 264,
-      "width": 84,
-      "depth": 192,
-      "area_sqft": 112,
-      "category": "dusty",
-      "_notes": "Right side - breakdown table, CNC bay, sanding, dust collection"
+      "_notes": "Front left (SW corner) - sheet goods entry from open wall, vertical rack, lumber stage"
     },
     "zone_clean": {
       "name": "Clean Zone (Melissa + Electronics)",
       "x_start": 0,
-      "x_end": 72,
-      "y_start": 96,
-      "y_end": 300,
-      "width": 72,
-      "depth": 204,
-      "area_sqft": 102,
+      "x_end": 120,
+      "y_start": 60,
+      "y_end": 156,
+      "width": 120,
+      "depth": 96,
+      "area_sqft": 80,
       "category": "clean",
-      "_notes": "Left side - Melissa's bench, PC station, electronics, 3D printing, Cricut"
+      "_notes": "Left side (west) - Melissa's bench, PC station, electronics, 3D printing, Cricut. 10ft x 8ft"
     },
-    "zone_assembly": {
-      "name": "Assembly / Kayak Lane",
-      "x_start": 72,
-      "x_end": 96,
-      "y_start": 72,
-      "y_end": 336,
-      "width": 24,
-      "depth": 264,
-      "area_sqft": 44,
+    "zone_dusty": {
+      "name": "Dusty Zone (Breakdown + CNC)",
+      "x_start": 156,
+      "x_end": 312,
+      "y_start": 0,
+      "y_end": 156,
+      "width": 156,
+      "depth": 156,
+      "area_sqft": 169,
+      "category": "dusty",
+      "_notes": "Center-right - breakdown table, CNC bay, sanding, dust collection. 13ft x 13ft"
+    },
+    "zone_packship": {
+      "name": "Pack / Ship Bench",
+      "x_start": 312,
+      "x_end": 360,
+      "y_start": 0,
+      "y_end": 60,
+      "width": 48,
+      "depth": 60,
+      "area_sqft": 20,
       "category": "shared",
-      "_notes": "Center corridor - doubles as kayak assembly lane (22ft clear)"
+      "_notes": "Front right (SE corner) - one-way flow terminus, easy access to open wall for shipping"
+    },
+    "zone_fume": {
+      "name": "Fume / Finishing (Bump-Out)",
+      "x_start": 264,
+      "x_end": 360,
+      "y_start": 180,
+      "y_end": 228,
+      "width": 96,
+      "depth": 48,
+      "area_sqft": 32,
+      "category": "dirty_fume",
+      "in_bump_out": true,
+      "vent_penetration": {
+        "wall": "north",
+        "x_center": 312,
+        "y": 228
+      },
+      "_notes": "8x4 bump-out on back wall right side. Coatings, adhesives, resins. Dedicated exhaust to exterior. NO open flame."
     },
     "zone_cabinetry": {
       "name": "Back Wall Cabinetry",
       "x_start": 0,
-      "x_end": 180,
-      "y_start": 336,
-      "y_end": 360,
-      "width": 180,
+      "x_end": 264,
+      "y_start": 156,
+      "y_end": 180,
+      "width": 264,
       "depth": 24,
-      "area_sqft": 30,
-      "category": "infrastructure"
+      "area_sqft": 44,
+      "category": "infrastructure",
+      "_notes": "Back wall from left to bump-out (22ft cabinet run)"
     },
-    "zone_fume": {
-      "name": "Fume / Finishing (Bump-Out)",
-      "x_start": 180,
-      "x_end": 228,
-      "y_start": 264,
-      "y_end": 312,
-      "width": 48,
-      "depth": 48,
-      "area_sqft": 16,
-      "category": "dirty_fume",
-      "in_bump_out": true,
-      "vent_penetration": {
-        "wall": "east",
-        "x": 228,
-        "y_center": 288
-      },
-      "_notes": "4x4 bump-out - coatings, adhesives, resins. Dedicated exhaust. NO open flame."
+    "zone_kayak": {
+      "name": "Kayak Lane / Assembly",
+      "x_start": 36,
+      "x_end": 312,
+      "y_start": 60,
+      "y_end": 96,
+      "width": 276,
+      "depth": 36,
+      "area_sqft": 69,
+      "category": "shared",
+      "_notes": "E-W corridor for kayak assembly - 23ft clear run. Also serves as main circulation."
     }
   },
 
   "stations": {
     "melissa_workbench_phenolic": {
-      "width": 60,
+      "width": 72,
       "depth": 30,
       "height": 36,
-      "width_mm": 1524,
+      "width_mm": 1829,
       "depth_mm": 762,
       "height_mm": 914,
-      "_notes": "Sized for 6ft zone width. Phenolic top assembly bench."
+      "_notes": "6ft phenolic top assembly bench in clean zone"
     },
     "melissa_pc_station": {
-      "width": 48,
-      "depth": 24,
+      "width": 60,
+      "depth": 30,
       "height": 30,
-      "_notes": "Seated desk height for computer work"
+      "_notes": "5ft desk for computer/design work"
     },
     "electronics_bench": {
-      "width": 48,
+      "width": 60,
       "depth": 30,
       "height": 30,
       "_notes": "Seated work height, ESD-safe surface, microscope + rework"
     },
     "breakdown_table": {
-      "width": 72,
+      "width": 96,
       "depth": 48,
       "height": 34,
-      "_notes": "Sized down from 96in for narrower room. Phenolic + T-track + dogs."
+      "_notes": "8ft x 4ft phenolic + T-track + dogs for track saw"
     },
     "cnc_bay": {
       "machine_width": 48,
       "machine_depth": 48,
-      "service_clearance_front": 36,
+      "service_clearance_front": 48,
       "service_clearance_sides": 24,
-      "total_width_with_clearance": 96,
-      "total_depth_with_clearance": 84,
+      "service_clearance_rear": 12,
+      "total_footprint_width": 96,
+      "total_footprint_depth": 108,
       "tiling_capability": "4x8",
-      "_notes": "4x4 machine. For 4x8 tiling, feed stock from front."
+      "_notes": "4x4 machine. For 4x8 tiling, feed stock from front (south)."
     },
     "sanding_table_downdraft": {
-      "width": 36,
-      "depth": 30,
+      "width": 48,
+      "depth": 36,
       "height": 36,
-      "_notes": "Compact for space. Integrated dust collection."
+      "_notes": "Integrated dust collection"
     },
     "dirty_vent_table": {
-      "width": 42,
-      "depth": 42,
+      "width": 72,
+      "depth": 36,
       "height": 36,
-      "_notes": "Fits 4x4 bump-out with work clearance. Chemical-resistant surface."
+      "_notes": "6ft x 3ft in bump-out. Chemical-resistant surface."
     },
     "pack_ship_bench": {
-      "width": 60,
+      "width": 48,
       "depth": 30,
       "height": 36,
-      "_notes": "Front right, near exit"
+      "_notes": "4ft bench, front right near exit"
     },
     "printer_bay_3d": {
-      "width": 30,
+      "width": 36,
       "depth": 24,
       "height": 48,
       "_notes": "Enclosure with filament storage"
     },
     "cricut_station": {
-      "width": 30,
+      "width": 36,
       "depth": 24,
       "height": 36,
       "_notes": "Die cutter station"
     },
     "vertical_sheet_rack": {
-      "width": 60,
+      "width": 96,
       "depth": 12,
       "height": 84,
-      "_notes": "4x8 sheet storage, vertical"
+      "_notes": "4x8 sheet storage, vertical, in receiving zone"
     },
     "lumber_rack": {
       "width": 12,
-      "depth": 72,
+      "depth": 96,
       "height": 48,
-      "_notes": "Long stock horizontal storage"
+      "_notes": "Long stock horizontal storage along wall"
     }
   },
 
   "infrastructure": {
     "dust_collector": {
-      "width": 24,
-      "depth": 24,
-      "height": 48,
-      "location": "northeast_corner_main",
-      "x": 156,
-      "y": 300,
-      "_notes": "Compact collector near dusty zone back"
+      "width": 30,
+      "depth": 30,
+      "height": 60,
+      "location": "dusty_zone_back",
+      "x": 280,
+      "y": 130,
+      "_notes": "Near back wall in dusty zone, close to CNC"
     },
     "soft_dust_barrier": {
       "type": "curtain_partition",
-      "x": 84,
-      "y_start": 72,
-      "y_end": 300,
-      "_notes": "Between clean (west) and dusty (east) zones. Airflow: west to east."
+      "x": 132,
+      "y_start": 60,
+      "y_end": 156,
+      "_notes": "Between clean (west) and dusty (center/east) zones. Airflow: west to east."
     }
   },
 
   "electrical": {
-    "total_circuits_estimate": "10-12",
-    "subpanel_recommended_amps": 60,
+    "total_circuits_estimate": "12-14",
+    "subpanel_recommended_amps": 100,
     "outlet_spacing_cabinetry": 48,
     "zones": {
-      "electronics": { "circuits": 1, "voltage": "120V", "amps": 20, "special": "isolated_ground" },
-      "clean_bench": { "circuits": 1, "voltage": "120V", "amps": 20 },
-      "dusty": { "circuits": 2, "voltage": "120V/240V", "amps_120": 20, "amps_240": 30 },
+      "clean": { "circuits": 2, "voltage": "120V", "amps": 20, "special": "isolated_ground_for_electronics" },
+      "dusty": { "circuits": 3, "voltage": "120V/240V", "amps_120": 20, "amps_240": 30 },
       "fume_zone": { "circuits": 1, "voltage": "120V", "amps": 20, "special": "GFCI" },
-      "receiving": { "circuits": 1, "voltage": "120V", "amps": 15 },
+      "receiving": { "circuits": 1, "voltage": "120V", "amps": 20 },
       "cabinetry": { "circuits": 3, "voltage": "120V", "amps": "15-20" }
     }
   },
 
   "hvac": {
-    "fume_exhaust_cfm": { "min": 150, "max": 300 },
-    "dust_collection_cfm": { "min": 400, "max": 600 },
+    "fume_exhaust_cfm": { "min": 200, "max": 400 },
+    "dust_collection_cfm": { "min": 400, "max": 800 },
     "local_exhaust_cfm": { "min": 50, "max": 100 },
     "airflow_direction": "west_to_east",
-    "bump_out_exhaust": "direct_exterior_east_wall",
-    "_notes": "Make-up air from south (open wall). Fume exhaust through bump-out east wall."
+    "bump_out_exhaust": "direct_exterior_north_wall",
+    "_notes": "Make-up air from south (open wall). Fume exhaust through bump-out north wall."
   },
 
   "constraints": {
@@ -323,13 +327,12 @@
       "Sheet goods receiving adjacent to breakdown table",
       "Breakdown adjacent to CNC bay",
       "Fume zone in bump-out, isolated with dedicated exhaust",
-      "Pack/ship bench at front for easy exit"
+      "Pack/ship at front right for easy exit via open wall"
     ]
   },
 
   "_assumed_measurements": [
     "ceiling_height: 96 in (8 ft)",
-    "bump_out: 48x48 (4x4 ft)",
-    "All station dimensions sized for 15ft room width"
+    "All station dimensions are reasonable defaults - verify before build"
   ]
 }

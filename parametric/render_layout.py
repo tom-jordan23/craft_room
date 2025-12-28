@@ -30,9 +30,10 @@ def setup_figure(params, title):
     room_w = room['room_width']
     room_d = room['room_depth']
 
-    # Figure size proportional to room
-    fig_w = 14
-    fig_h = fig_w * (room_d / room_w) * 0.7
+    # Figure size proportional to room (landscape orientation for wide rooms)
+    fig_w = 16
+    aspect = room_d / room_w
+    fig_h = max(8, fig_w * aspect * 1.1)  # Ensure minimum height for labels
     fig, ax = plt.subplots(1, 1, figsize=(fig_w, fig_h))
 
     ax.set_facecolor('white')
@@ -97,7 +98,14 @@ def setup_figure(params, title):
 
 def render_zones(params):
     """Render zone allocation diagram from parameters."""
-    fig, ax = setup_figure(params, 'CRAFT ROOM - ZONE LAYOUT (15\' x 30\' + 4\' Bump-Out)')
+    room = params['room']
+    bump = params.get('bump_out', {})
+    title = f'CRAFT ROOM - ZONE LAYOUT ({room["room_width_ft"]}\' x {room["room_depth_ft"]}\''
+    if bump.get('enabled'):
+        title += f' + {bump["width_ft"]}\'x{bump["depth_ft"]}\' Bump-Out)'
+    else:
+        title += ')'
+    fig, ax = setup_figure(params, title)
 
     zones = params['zones']
     bump = params.get('bump_out', {})
@@ -172,8 +180,8 @@ def render_zones(params):
     if bump.get('enabled'):
         bx = (bump['x_start'] + bump['x_end']) / 2
         by = bump['y_end'] + 8
-        ax.text(bx, by, f"4' × 4' BUMP-OUT", ha='center', fontsize=8,
-               color='#666', style='italic')
+        ax.text(bx, by, f"{bump['width_ft']}' × {bump['depth_ft']}' BUMP-OUT",
+               ha='center', fontsize=8, color='#666', style='italic')
 
     # Legend
     legend_y = params['room']['room_depth'] + 45
@@ -204,7 +212,8 @@ def render_zones(params):
 
 def render_stations(params):
     """Render station placement diagram."""
-    fig, ax = setup_figure(params, 'CRAFT ROOM - STATION LAYOUT (15\' x 30\')')
+    room = params['room']
+    fig, ax = setup_figure(params, f'CRAFT ROOM - STATION LAYOUT ({room["room_width_ft"]}\' x {room["room_depth_ft"]}\')')
 
     zones = params['zones']
     stations = params['stations']
@@ -217,30 +226,29 @@ def render_stations(params):
                          edgecolor='#ddd', linewidth=1)
         ax.add_patch(rect)
 
-    # Station placements (calculated positions within zones)
-    # These are example placements - would be refined based on actual layout
+    # Station placements for 30'x15' layout (wide orientation)
     station_positions = {
-        # Clean zone stations (against west wall, stacked north-south)
-        'melissa_workbench_phenolic': {'x': 6, 'y': 240, 'zone': 'zone_clean'},
-        'melissa_pc_station': {'x': 6, 'y': 180, 'zone': 'zone_clean'},
-        'electronics_bench': {'x': 6, 'y': 130, 'zone': 'zone_clean'},
-        'printer_bay_3d': {'x': 42, 'y': 270, 'zone': 'zone_clean'},
-        'cricut_station': {'x': 42, 'y': 240, 'zone': 'zone_clean'},
+        # Clean zone stations (left/west side)
+        'melissa_workbench_phenolic': {'x': 24, 'y': 100},
+        'melissa_pc_station': {'x': 24, 'y': 66},
+        'electronics_bench': {'x': 60, 'y': 120},
+        'printer_bay_3d': {'x': 84, 'y': 100},
+        'cricut_station': {'x': 84, 'y': 66},
 
-        # Dusty zone stations
-        'breakdown_table': {'x': 108, 'y': 90, 'zone': 'zone_dusty'},
-        'cnc_bay': {'x': 108, 'y': 160, 'zone': 'zone_dusty'},
-        'sanding_table_downdraft': {'x': 138, 'y': 230, 'zone': 'zone_dusty'},
+        # Dusty zone stations (center-right)
+        'breakdown_table': {'x': 168, 'y': 6},
+        'cnc_bay': {'x': 180, 'y': 60},
+        'sanding_table_downdraft': {'x': 260, 'y': 100},
 
-        # Receiving zone
-        'vertical_sheet_rack': {'x': 12, 'y': 6, 'zone': 'zone_receiving'},
-        'lumber_rack': {'x': 6, 'y': 48, 'zone': 'zone_receiving'},
+        # Receiving zone (front left)
+        'vertical_sheet_rack': {'x': 6, 'y': 6},
+        'lumber_rack': {'x': 6, 'y': 24},
 
-        # Pack/ship
-        'pack_ship_bench': {'x': 120, 'y': 6, 'zone': 'zone_packship'},
+        # Pack/ship (front right)
+        'pack_ship_bench': {'x': 312, 'y': 6},
 
-        # Fume zone (bump-out)
-        'dirty_vent_table': {'x': 183, 'y': 267, 'zone': 'zone_fume'},
+        # Fume zone (bump-out, upper right)
+        'dirty_vent_table': {'x': 276, 'y': 186},
     }
 
     # Draw stations
@@ -264,14 +272,20 @@ def render_stations(params):
         ax.text(x + w/2, y + d/2, label, ha='center', va='center',
                fontsize=5, color='#0D47A1')
 
-    # Draw kayak lane indicator
+    # Draw kayak lane indicator (E-W orientation for wide room)
     circ = params['circulation']
-    kayak_len = circ.get('kayak_lane_length_available', 264)
-    ax.add_patch(Rectangle((72, 72), 24, kayak_len,
-                           facecolor='#E8F5E9', alpha=0.3,
-                           edgecolor='#4CAF50', linewidth=2, linestyle='--'))
-    ax.text(84, 72 + kayak_len/2, f'KAYAK LANE\n{kayak_len//12}\' CLEAR',
-           ha='center', va='center', fontsize=8, color='#2E7D32', rotation=90)
+    kayak_len = circ.get('kayak_lane_length_available', 276)
+    kayak_zone = zones.get('zone_kayak', {})
+    if kayak_zone:
+        kx = kayak_zone.get('x_start', 36)
+        ky = kayak_zone.get('y_start', 60)
+        kw = kayak_zone.get('width', kayak_len)
+        kd = kayak_zone.get('depth', 36)
+        ax.add_patch(Rectangle((kx, ky), kw, kd,
+                               facecolor='#E8F5E9', alpha=0.3,
+                               edgecolor='#4CAF50', linewidth=2, linestyle='--'))
+        ax.text(kx + kw/2, ky + kd/2, f'KAYAK LANE - {kw//12}\' CLEAR (E-W)',
+               ha='center', va='center', fontsize=9, color='#2E7D32')
 
     # Cabinetry runs
     cab = params['cabinetry']
@@ -292,6 +306,7 @@ def render_flow(params):
 
     zones = params['zones']
     room = params['room']
+    bump = params.get('bump_out', {})
 
     # Ghost zones
     for zone_id, zone in zones.items():
@@ -305,72 +320,69 @@ def render_flow(params):
         cy = zone['y_start'] + zone['depth']/2
         short_name = zone['name'].split()[0]
         ax.text(cx, cy, short_name, ha='center', va='center',
-               fontsize=8, color='#aaa')
+               fontsize=9, color='#aaa')
 
-    # Entry indicator
+    # Entry indicator (center of open wall)
     entry_x = room['room_width'] / 2
-    entry = FancyBboxPatch((entry_x - 30, -20), 60, 18,
+    entry = FancyBboxPatch((entry_x - 40, -25), 80, 20,
                            boxstyle="round,pad=0.02",
                            facecolor='#E3F2FD', edgecolor='#1976D2', linewidth=2)
     ax.add_patch(entry)
-    ax.text(entry_x, -11, 'ENTRY', ha='center', va='center',
+    ax.text(entry_x, -15, 'ENTRY (30\' open wall)', ha='center', va='center',
            fontsize=10, fontweight='bold', color='#1565C0')
 
-    # Material flow arrows (orange, one-way)
+    # Material flow arrows (orange, one-way) for 30x15 layout
     flow_color = '#FF9800'
-    arrow_kw = dict(arrowstyle='->', color=flow_color, lw=2.5)
+    arrow_kw = dict(arrowstyle='->', color=flow_color, lw=3)
 
-    # 1. Entry to Receiving
-    ax.annotate('', xy=(42, 36), xytext=(60, 0),
+    # 1. Entry to Receiving (front left)
+    ax.annotate('', xy=(48, 30), xytext=(140, 0),
                 arrowprops=arrow_kw)
+    ax.text(48, 50, '1. RECEIVE', fontsize=9, color='#E65100', fontweight='bold')
 
-    # 2. Receiving to Breakdown
-    ax.annotate('', xy=(120, 100), xytext=(60, 50),
+    # 2. Receiving to Breakdown (center)
+    ax.annotate('', xy=(200, 30), xytext=(80, 30),
                 arrowprops=arrow_kw)
+    ax.text(200, 50, '2. BREAKDOWN', fontsize=9, color='#E65100', fontweight='bold')
 
     # 3. Breakdown to CNC
-    ax.annotate('', xy=(130, 180), xytext=(130, 140),
+    ax.annotate('', xy=(210, 90), xytext=(210, 50),
                 arrowprops=arrow_kw)
+    ax.text(230, 100, '3. CNC', fontsize=9, color='#E65100', fontweight='bold')
 
-    # 4. CNC to Fume Zone (via bump-out)
-    ax.annotate('', xy=(200, 285), xytext=(155, 210),
+    # 4. CNC to Fume Zone (bump-out upper right)
+    ax.annotate('', xy=(300, 200), xytext=(240, 120),
                 arrowprops=arrow_kw)
+    ax.text(290, 210, '4. FINISH', fontsize=9, color='#E65100', fontweight='bold')
 
-    # 5. Fume to Pack/Ship (finished goods)
-    ax.annotate('', xy=(150, 24), xytext=(200, 270),
-                arrowprops=dict(arrowstyle='->', color=flow_color, lw=2.5,
-                               connectionstyle='arc3,rad=-0.3'))
-
-    # Flow labels
-    ax.text(30, 60, '1. RECEIVE', fontsize=7, color='#E65100', fontweight='bold')
-    ax.text(95, 85, '2. BREAKDOWN', fontsize=7, color='#E65100', fontweight='bold')
-    ax.text(145, 160, '3. CNC', fontsize=7, color='#E65100', fontweight='bold')
-    ax.text(175, 250, '4. FINISH', fontsize=7, color='#E65100', fontweight='bold')
-    ax.text(155, 40, '5. SHIP', fontsize=7, color='#E65100', fontweight='bold')
+    # 5. Fume to Pack/Ship (back to front right)
+    ax.annotate('', xy=(336, 40), xytext=(320, 185),
+                arrowprops=dict(arrowstyle='->', color=flow_color, lw=3,
+                               connectionstyle='arc3,rad=0.2'))
+    ax.text(336, 50, '5. SHIP', fontsize=9, color='#E65100', fontweight='bold')
 
     # Airflow (west to east, purple dashed)
-    air_y = 200
-    ax.annotate('', xy=(175, air_y), xytext=(10, air_y),
-                arrowprops=dict(arrowstyle='->', color='#9C27B0', lw=2, linestyle='dashed'))
-    ax.text(90, air_y + 12, 'AIRFLOW: Clean (W) → Dirty (E) → EXHAUST',
-           ha='center', fontsize=8, color='#7B1FA2', style='italic')
+    air_y = 130
+    ax.annotate('', xy=(340, air_y), xytext=(20, air_y),
+                arrowprops=dict(arrowstyle='->', color='#9C27B0', lw=2.5, linestyle='dashed'))
+    ax.text(180, air_y + 15, 'AIRFLOW: Clean (W) → Dusty → Fume (E) → EXHAUST',
+           ha='center', fontsize=9, color='#7B1FA2', style='italic')
 
-    # Exhaust at bump-out
-    bump = params['bump_out']
+    # Exhaust at bump-out (north wall)
     if bump.get('enabled'):
-        ex = bump['x_end']
-        ey = (bump['y_start'] + bump['y_end']) / 2
-        ax.annotate('EXHAUST', xy=(ex + 5, ey), xytext=(ex - 20, ey),
+        ex_x = (bump['x_start'] + bump['x_end']) / 2
+        ex_y = bump['y_end']
+        ax.annotate('EXHAUST\n(exterior)', xy=(ex_x, ex_y + 5), xytext=(ex_x, ex_y - 20),
                    arrowprops=dict(arrowstyle='->', color='#9C27B0', lw=2),
-                   fontsize=8, color='#7B1FA2', fontweight='bold')
+                   fontsize=9, ha='center', color='#7B1FA2', fontweight='bold')
 
     # Legend
-    ly = room['room_depth'] + 50
-    ax.plot([20, 50], [ly, ly], color=flow_color, lw=2.5)
-    ax.text(55, ly, 'Material Flow (one-way)', va='center', fontsize=8)
+    ly = room['room_depth'] + 35
+    ax.plot([20, 60], [ly, ly], color=flow_color, lw=3)
+    ax.text(65, ly, 'Material Flow (one-way)', va='center', fontsize=9)
 
-    ax.plot([120, 150], [ly, ly], color='#9C27B0', lw=2, linestyle='--')
-    ax.text(155, ly, 'Airflow', va='center', fontsize=8)
+    ax.plot([180, 220], [ly, ly], color='#9C27B0', lw=2.5, linestyle='--')
+    ax.text(225, ly, 'Airflow', va='center', fontsize=9)
 
     return fig, ax
 
