@@ -40,8 +40,9 @@
     "width_ft": 8,
     "depth_ft": 4,
     "area_sqft": 32,
+    "extends_outward": true,
     "total_room_sqft": 482,
-    "_notes": "8ft wide x 4ft deep bump-out extending north from back wall, on right (east) side. For fume/finishing work."
+    "_notes": "8ft wide x 4ft deep bump-out extending north beyond back wall. Opens from right 8' of back wall. Fume/finishing zone."
   },
 
   "circulation": {
