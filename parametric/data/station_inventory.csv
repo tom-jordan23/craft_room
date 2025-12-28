@@ -1,0 +1,27 @@
+station_id,station_name,category,zone,width_in,depth_in,height_in,clearance_front_in,clearance_sides_in,clearance_rear_in,power_circuits,power_voltage,power_special,network,dust_fume,storage_type,adjacency_constraints,status,notes
+MelissaWorkBench_Phenolic,Melissa's Workbench (Phenolic),Clean,zone_clean,60,30,36,36,24,0,1,120V,,optional,none,drawers,"Against west wall, near PC station",ASSUMED,Phenolic-topped assembly/precision bench
+MelissaPC_DesignStation,Melissa's PC/Design Station,Clean,zone_clean,48,24,30,30,12,0,1,120V,,required,none,shelves,Adjacent to workbench,ASSUMED,Computer for design/pattern work
+ElectronicsBench_ReworkMicroscope,Electronics & Soldering Bench,Clean,zone_clean,48,30,30,36,24,0,1,120V,isolated_ground,required,fume_local,drawers,Near back of clean zone,ASSUMED,Microscope + rework with fume extraction
+PrinterBay_3DPrint_Enclosure,3D Printer Bay,Clean,zone_clean,30,24,48,24,12,0,1,120V,,optional,none,shelves,Near design station,ASSUMED,Enclosure with filament storage
+Cricut_2DCAM_Station,Cricut / 2D CAM Station,Clean,zone_clean,30,24,36,24,12,0,1,120V,,optional,none,shelves,Near design station,ASSUMED,Die cutter and 2D CAM
+CleanStorage_FlatFiles,Flat File Storage,Clean,zone_clean,36,30,48,24,0,0,0,,,none,none,flat_file,Near workbench,ASSUMED,Large format storage
+CleanStorage_NotionDrawers,Notion Drawer Unit,Clean,zone_clean,24,20,36,24,0,0,0,,,none,none,drawers,Near workbench,ASSUMED,Small parts and notions
+TV_WallMount,Wall-Mounted TV Display,Clean,zone_clean,42,4,28,0,0,0,1,120V,,required,none,none,West wall visible from work areas,ASSUMED,Reference display
+Receiving_SheetGoods,Sheet Goods Receiving Area,Dusty,zone_receiving,48,48,0,36,24,0,0,,,none,dust,none,"At open edge, near breakdown",ASSUMED,Material receiving
+Storage_SheetVerticalRack,Sheet Goods Vertical Rack,Dusty,zone_receiving,60,12,84,36,0,0,0,,,none,dust,rack,Adjacent to receiving,ASSUMED,4x8 sheet storage vertical
+Storage_LongStock,Long Stock Lumber Rack,Dusty,zone_receiving,12,72,48,24,0,0,0,,,none,dust,rack,Near vertical rack,ASSUMED,Horizontal lumber storage
+BreakdownTable_GridDogsTrackSaw,Breakdown Table,Dusty,zone_dusty,72,48,34,36,24,0,1,120V,,none,dust,none,"Adjacent to sheet goods and CNC",ASSUMED,Phenolic + T-track + dogs for track saw
+CNC_Bay_4x4_Tiling4x8,CNC Router Bay,Dusty,zone_dusty,48,48,36,36,24,24,2,120V/240V,,required,dust,cart,Adjacent to breakdown table,ASSUMED,4x4 machine with 4x8 tiling capability
+CNCToolCart_BitsFixturing,CNC Tool Cart,Dusty,zone_dusty,24,18,36,24,0,0,0,,,none,none,drawers,Adjacent to CNC bay,ASSUMED,Bit management and fixturing
+SandingTable_Downdraft,Sanding / Downdraft Table,Dusty,zone_dusty,36,30,36,36,24,0,1,120V,,none,dust,none,Near dust collector,ASSUMED,Integrated dust collection
+DustCollector_Compact,Dust Collector,Dusty,zone_dusty,24,24,48,24,12,0,1,240V,,none,dust,none,Northeast corner of main room,ASSUMED,Central dust collection
+DirtyVentTable_BumpOut,Dirty/Vent Table (Bump-Out),Dirty_Fume,zone_fume,42,42,36,0,0,0,1,120V,GFCI,none,fume_dedicated,none,In bump-out with exterior vent,ASSUMED,NO open flame or hot metalwork
+FinishingSupplies_Shelf,Finishing Supplies Shelf,Dirty_Fume,zone_fume,24,12,48,24,0,0,0,,,none,fume_ambient,shelves,Adjacent to vent table,ASSUMED,Coatings and supplies
+CuringRacks_Drying,Curing/Drying Rack,Dirty_Fume,zone_fume,18,18,48,12,0,0,0,,,none,fume_ambient,rack,Corner of bump-out,ASSUMED,Project curing storage
+PackShipBench_SouthWall,Pack/Ship Bench,Shared,zone_packship,60,30,36,36,24,0,1,120V,,optional,none,shelves,Front right near exit,ASSUMED,One-way flow terminus
+ProjectParking_Carts,Project Parking (Carts),Shared,zone_assembly,36,36,0,36,36,36,0,,,none,none,none,Designated spots in aisle,ASSUMED,Mobile cart staging
+KayakLane_Assembly,Kayak Lane / Assembly,Shared,zone_assembly,24,264,0,0,0,0,0,,,none,none,none,Center corridor - keep clear,ASSUMED,22ft clear run for kayak
+BackWall_CabinetRun,Back Wall Cabinet Run,Infrastructure,zone_cabinetry,180,24,36,0,0,0,3,120V,,none,none,cabinet,Full back wall,ASSUMED,15ft cabinet run with countertop
+BackWall_Countertop,Back Wall Countertop,Infrastructure,zone_cabinetry,180,25,1.5,0,0,0,0,,,none,none,none,Above base cabinets,ASSUMED,Secondary work surface
+LeftWall_CabinetRun,Left Wall Cabinet Run,Infrastructure,zone_clean,24,156,36,0,0,0,1,120V,,none,none,cabinet,Left wall in clean zone,ASSUMED,13ft cabinet run
+SoftDustBarrier,Soft Dust Barrier,Infrastructure,zone_assembly,1,228,96,0,0,0,0,,,none,none,none,Between clean and dusty zones at x=84,ASSUMED,Curtain/partition for airflow
